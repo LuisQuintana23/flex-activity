@@ -1,15 +1,18 @@
 %{
-    #include <stdio.h>
-    int count_lower_letters = 0;
+#include <stdio.h>
+int count_lower_letters = 0;
+int yywrap() {
+    return 1;
+}
 %}
 
 %%
-[0-9]+    { printf("Número encontrado: %s\n", yytext); }
-[a-zA-Z]+@[a-zA-Z]+\.(com|org|net) { printf("Correo detectado: %s\n", yytext); }
-#[a-fA-F0-9]{6} { printf("Código de color HEX detectado: %s\n", yytext); }
-w(x|y)z { printf("wxz or wyz");}
-[^A-Z]+    { printf("\nAll the other charecters except the upper case letters: %s", yytext); count_lower_letters++;}
-.         { printf("Otro carácter: %s\n", yytext); }
+[0-9]+    { printf("Number found: %s\n", yytext); }
+[a-zA-Z]+@[a-zA-Z]+\.(com|org|net) { printf("Email detected: %s\n", yytext); }
+#[a-fA-F0-9]{6} { printf("HEX color code detected: %s\n", yytext); }
+w(x|y)z { printf("wxz or wyz\n"); }
+[^A-Z]+    { printf("\nAll the other characters except the uppercase letters: %s\n", yytext); }
+.         { printf("Other character: %s\n", yytext); }
 %%
 
 int main(int argc, char *argv[]) {
@@ -20,20 +23,13 @@ int main(int argc, char *argv[]) {
 
     FILE *file = fopen(argv[1], "r");
     if (!file) {
-        printf("Error opening the file\n");
+        fprintf(stderr, "Error opening file: %s\n", argv[1]);
         return 1;
     }
 
-    yyin = file;
-    yylex();
-
-    printf("\nNumber of all the other charecters except the upper case letters: %d\n", count_lower_letters);
-
+    yyin = file;  // Asignamos el archivo a la entrada léxica
+    yylex();  // Procesamos el archivo
     fclose(file);
+
     return 0;
 }
-
-int yywrap() {
-    return 1;
-}
-
