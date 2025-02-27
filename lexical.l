@@ -3,13 +3,15 @@
     int count_lower_letters = 0;
 %}
 
+WXZ w(x|y)z
+
 %%
-[0-9]+    { printf("Número encontrado: %s\n", yytext); }
-[a-zA-Z]+@[a-zA-Z]+\.(com|org|net) { printf("Correo detectado: %s\n", yytext); }
-#[a-fA-F0-9]{6} { printf("Código de color HEX detectado: %s\n", yytext); }
-w(x|y)z { printf("wxz or wyz");}
-[^A-Z]+    { printf("\nAll the other charecters except the upper case letters: %s", yytext); count_lower_letters++;}
-.         { printf("Otro carácter: %s\n", yytext); }
+{WXZ} { printf("wxz or wyz: %s", yytext);}
+[0-9]+    { printf("Number detected: %s\n", yytext); }
+a{2,4}    { printf("either aa, aaa or aaaa: %s", yytext); }
+[a-zA-Z]+@[a-zA-Z]+\.(com|org|net) { printf("E-mail detected: %s\n", yytext); }
+#[a-fA-F0-9]{6} { printf("Hexadecimal color detected: %s\n", yytext); }
+.         { printf("Another character: %s\n", yytext); }
 %%
 
 int main(int argc, char *argv[]) {
