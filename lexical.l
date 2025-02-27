@@ -4,8 +4,12 @@
 %}
 
 %%
+[0-9]+    { printf("Número encontrado: %s\n", yytext); }
+[a-zA-Z]+@[a-zA-Z]+\.(com|org|net) { printf("Correo detectado: %s\n", yytext); }
+#[a-fA-F0-9]{6} { printf("Código de color HEX detectado: %s\n", yytext); }
+w(x|y)z { printf("wxz or wyz");}
 [^A-Z]+    { printf("\nAll the other charecters except the upper case letters: %s", yytext); count_lower_letters++;}
-.	 {};
+.         { printf("Otro carácter: %s\n", yytext); }
 %%
 
 int main(int argc, char *argv[]) {
